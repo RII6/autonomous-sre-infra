@@ -7,7 +7,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - [HONEYPOT] - %(message)s')
 
 # Адрес нашего бэкенда во внутренней сети Docker
-BACKEND_WEBHOOK_URL = "http://app:8000/api/webhook/threat"
+BACKEND_WEBHOOK_URL = "http://sre_agent:8001/api/webhook/threat"
 
 async def handle_client(reader, writer):
     # Получаем IP адрес того, кто подключился
@@ -35,7 +35,7 @@ async def handle_client(reader, writer):
 
     # Отправляем webhook на бэкенд
     try:
-        payload = json.dumps({"ip": attacker_ip, "type": "SSH Brute-force / Port Scan"}).encode('utf-8')
+        payload = json.dumps({"ip": attacker_ip, "type": "SSH Brute-force / Port Scan", "username": "unknown", "password": "unknown"}).encode('utf-8')
         req = urllib.request.Request(BACKEND_WEBHOOK_URL, data=payload, headers={'Content-Type': 'application/json'})
         with urllib.request.urlopen(req) as response:
             logging.info(f"Бэкенд ответил: {response.getcode()}")

@@ -26,7 +26,7 @@ def compute_heavy():
     """
     # Симуляция тяжелых вычислений
     result = 0
-    for i in range(1, 2500):
+    for i in range(1, 10000):
         result += math.sqrt(i)
     return {"status": "success"}
 

@@ -45,18 +45,26 @@ def handle_alert(payload: dict):
         alerts = payload.get("alerts", [])
         for alert in alerts:
             alertname = alert.get("labels", {}).get("alertname", "")
+            status = alert.get("status")
             
-            if alertname == "HighLatency_DDoS":
-                print(f"[ALERTMANAGER] Алерт HighLatency_DDoS!")
-                print(f"[SELF-HEALING] Запускаю экстренное масштабирование: app=2")
-                cmd = ["docker-compose", "-p", "autonomous-sre-infra", "up", "--scale", "app=2", "-d", "app"]
-                subprocess.run(cmd, cwd="/project")
-                
-            elif alertname == "BackendDead":
-                print(f"[ALERTMANAGER] Алерт BackendDead!")
-                print(f"[SELF-HEALING] Воскрешаю упавший сервис...")
-                cmd = ["docker-compose", "-p", "autonomous-sre-infra", "up", "--scale", "app=1", "-d", "app"]
-                subprocess.run(cmd, cwd="/project")
+            if status == "firing":
+                if alertname == "HighLatency_DDoS":
+                    print(f"[ALERTMANAGER] Алерт HighLatency_DDoS!")
+                    print(f"[SELF-HEALING] Запускаю экстренное масштабирование: app=2")
+                    cmd = ["docker-compose", "-p", "autonomous-sre-infra", "up", "--scale", "app=2", "-d", "app"]
+                    subprocess.run(cmd, cwd="/project")
+                    
+                elif alertname == "BackendDead":
+                    print(f"[ALERTMANAGER] Алерт BackendDead!")
+                    print(f"[SELF-HEALING] Воскрешаю упавший сервис...")
+                    cmd = ["docker-compose", "-p", "autonomous-sre-infra", "up", "--scale", "app=1", "-d", "app"]
+                    subprocess.run(cmd, cwd="/project")
+
+                elif alertname == "LowLoad_ScaleDown":
+                    print(f"[ALERTMANAGER] Алерт LowLoad_ScaleDown!")
+                    print(f"[AUTO-SCALING] Нагрузка спала. Уменьшаю количество реплик до: app=1")
+                    cmd = ["docker-compose", "-p", "autonomous-sre-infra", "up", "--scale", "app=1", "-d", "app"]
+                    subprocess.run(cmd, cwd="/project")
                 
         return {"status": "success", "message": "Alerts processed"}
     except Exception as e:
@@ -74,8 +82,8 @@ def trigger_ssh_attack():
 @app.post("/api/agent/attack/load")
 def trigger_load_attack():
     print("[ATTACK] Запуск генератора нагрузки hey на эндпоинт /api/heavy...")
-    # Шлем 30 секунд нагрузки напрямую на бэкенды в обход rate-limit Nginx
-    cmd = "docker run --rm --network sre_defense_net williamyeh/hey -z 30s -c 50 http://app:8000/api/heavy"
+    # Шлем 60 секунд нагрузки напрямую на бэкенды в обход rate-limit Nginx
+    cmd = "docker run --rm --network sre_defense_net williamyeh/hey -z 60s -c 500 http://app:8000/api/heavy"
     subprocess.Popen(cmd, shell=True)
     return {"status": "success", "message": "Load test launched"}
 

@@ -1,9 +1,10 @@
 global:
   scrape_interval: 5s 
+  evaluation_interval: 5s
 
 # Подключение правил алертов
 rule_files:
-  - 'alert-rules.yml'
+  - '/prometheus/alert-rules.yml'
 
 # Подключение к Alertmanager
 alerting:

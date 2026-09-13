@@ -8,5 +8,5 @@ route:
 receivers:
   - name: 'python-healer'
     webhook_configs:
-      - url: 'http://app:8000/api/webhook/alert'
+      - url: 'http://sre_agent:8001/api/webhook/alert'
         send_resolved: true

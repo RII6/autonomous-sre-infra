@@ -30,7 +30,7 @@ dashboard = {
       },
       "targets": [
         {
-          "expr": 'sum(rate(http_requests_total[$__rate_interval]))',
+          "expr": 'sum(rate(http_requests_total[10s]))',
           "legendFormat": "Total RPS"
         }
       ]
@@ -61,7 +61,7 @@ dashboard = {
       },
       "targets": [
         {
-          "expr": 'sum(rate(http_request_duration_seconds_sum[$__rate_interval])) / sum(rate(http_request_duration_seconds_count[$__rate_interval]))',
+          "expr": 'sum(rate(http_request_duration_seconds_sum[10s])) / sum(rate(http_request_duration_seconds_count[10s]))',
           "legendFormat": "Avg Latency"
         }
       ]
@@ -74,7 +74,7 @@ dashboard = {
       "transparent": True,
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "fixed", "fixedColor": "purple"},
+          "color": {"mode": "palette-classic"},
           "unit": "percent",
           "custom": {
             "fillOpacity": 40,
@@ -85,7 +85,7 @@ dashboard = {
       },
       "targets": [
         {
-          "expr": 'rate(process_cpu_seconds_total{job="sre-backend"}[$__rate_interval]) * 100',
+          "expr": 'rate(process_cpu_seconds_total{job="sre-backend"}[10s]) * 100',
           "legendFormat": "Node {{instance}}"
         }
       ]
@@ -98,7 +98,7 @@ dashboard = {
       "transparent": True,
       "fieldConfig": {
         "defaults": {
-          "color": {"mode": "fixed", "fixedColor": "semi-dark-yellow"},
+          "color": {"mode": "palette-classic"},
           "custom": {
             "fillOpacity": 40,
             "lineWidth": 2,

@@ -2,7 +2,7 @@ groups:
   - name: SRE_Defense_Rules
     rules:
       - alert: HighLatency_DDoS
-        expr: (sum(rate(http_request_duration_seconds_sum{handler="/api/heavy"}[15s])) / sum(rate(http_request_duration_seconds_count{handler="/api/heavy"}[15s]))) > 0.5
+        expr: (sum(rate(http_request_duration_seconds_sum{handler="/api/heavy"}[15s])) / sum(rate(http_request_duration_seconds_count{handler="/api/heavy"}[15s]))) > 0.2
         for: 5s
         labels:
           severity: critical
@@ -18,3 +18,12 @@ groups:
         annotations:
           summary: "All API backends are DOWN!"
           description: "Total outage detected. Triggering emergency recovery (Self-Healing)."
+
+      - alert: LowLoad_ScaleDown
+        expr: sum(rate(http_requests_total[15s])) < 10
+        for: 3m
+        labels:
+          severity: info
+        annotations:
+          summary: "Load is low (< 10 RPS)"
+          description: "Traffic has been low for 3 minutes. Scaling down to 1 replica to save resources."
