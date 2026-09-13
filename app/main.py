@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import random
+from prometheus_fastapi_instrumentator import Instrumentator
+import math
+import time
 
-app = FastAPI(title="SRE Defense API")
+app = FastAPI(title="Target Web Server (App)")
 
-# Разрешаем запросы от фронтенда
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -13,24 +14,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def read_root():
-    return {"status": "online", "system": "Infrastructure Immune System", "health": "stable"}
+# Инициализируем сборщик реальных метрик RED (Rate, Errors, Duration)
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
-@app.get("/api/metrics")
-def get_mock_metrics():
-    # Имитируем метрики для дашборда
-    return {
-        "cpu_usage": random.randint(15, 45),
-        "memory_usage": random.randint(40, 65),
-        "active_connections": random.randint(120, 350),
-        "threats_blocked": random.randint(3, 12)
-    }
+@app.get("/api/heavy")
+def compute_heavy():
+    """
+    Эндпоинт для генерации реальной нагрузки на процессор.
+    При Load-тестировании вызовы этого метода тысячами запросов в секунду 
+    нагрузят процессор до 100% и увеличат Latency в Grafana.
+    """
+    # Симуляция тяжелых вычислений
+    result = 0
+    for i in range(1, 2500):
+        result += math.sqrt(i)
+    return {"status": "success"}
 
-@app.post("/api/simulate/attack")
-def simulate_attack(attack_type: str):
-    return {
-        "status": "success",
-        "message": f"Simulation of '{attack_type}' initiated successfully.",
-        "action_taken": "Triggered defense protocol, monitoring metrics."
-    }
+@app.get("/api/health")
+def healthcheck():
+    return {"status": "ok"}

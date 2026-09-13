@@ -1,0 +1,20 @@
+groups:
+  - name: SRE_Defense_Rules
+    rules:
+      - alert: HighLatency_DDoS
+        expr: (sum(rate(http_request_duration_seconds_sum{handler="/api/heavy"}[15s])) / sum(rate(http_request_duration_seconds_count{handler="/api/heavy"}[15s]))) > 0.5
+        for: 5s
+        labels:
+          severity: critical
+        annotations:
+          summary: "API Latency > 500ms (High Load)"
+          description: "Average latency is extremely high, triggering auto-scaling to 2 replicas."
+
+      - alert: BackendDead
+        expr: sum(up{job="sre-backend"}) == 0 or absent(up{job="sre-backend"})
+        for: 5s
+        labels:
+          severity: critical
+        annotations:
+          summary: "All API backends are DOWN!"
+          description: "Total outage detected. Triggering emergency recovery (Self-Healing)."
