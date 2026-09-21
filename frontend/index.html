@@ -63,7 +63,7 @@
     </header>
 
     <!-- METRICS GRID -->
-    <div class="grid grid-cols-1 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- Metric Card (Real) -->
       <div class="bg-neutral-900/30 border border-neutral-800 rounded-2xl p-5 hover:border-neutral-700 hover:bg-neutral-900/50 transition-all duration-300 relative overflow-hidden group">
         <div class="absolute top-0 right-0 w-16 h-16 bg-red-500/10 rounded-bl-full blur-2xl"></div>
@@ -73,6 +73,44 @@
             <p id="threat-metric" class="text-3xl font-semibold text-red-400">0</p>
             <span class="text-red-500/50 text-xs border border-red-500/20 px-2 py-0.5 rounded-full">REAL</span>
           </div>
+        </div>
+      </div>
+
+      <!-- Alert Indicators Card -->
+      <div class="bg-neutral-900/30 border border-neutral-800 rounded-2xl p-5 hover:border-neutral-700 hover:bg-neutral-900/50 transition-all duration-300 relative group flex flex-col justify-between">
+        <p class="text-neutral-500 text-xs font-medium uppercase tracking-wider mb-4">Статус Нагрузки (Алерты)</p>
+        <div class="flex items-center gap-8">
+          
+          <!-- Low Load Indicator -->
+          <div class="group/low relative flex items-center gap-3 cursor-help">
+            <div class="relative">
+              <div id="ind-low-glow" class="absolute inset-0 bg-blue-500/0 blur-md rounded-full transition-all duration-500"></div>
+              <div id="ind-low-dot" class="w-3 h-3 rounded-full bg-neutral-700 relative z-10 transition-colors duration-500"></div>
+            </div>
+            <span id="ind-low-text" class="text-sm font-medium text-neutral-600 transition-colors duration-500">Low Load</span>
+            
+            <!-- Tooltip -->
+            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-neutral-900 border border-neutral-700 rounded-lg shadow-xl p-3 opacity-0 invisible group-hover/low:opacity-100 group-hover/low:visible transition-all duration-300 z-50 pointer-events-none">
+              <p class="text-xs font-bold text-neutral-300 mb-1">LowLoad_ScaleDown</p>
+              <p class="text-[10px] text-neutral-500 font-mono">expr: RPS < 10 for 1m</p>
+            </div>
+          </div>
+
+          <!-- High Load Indicator -->
+          <div class="group/high relative flex items-center gap-3 cursor-help">
+            <div class="relative">
+              <div id="ind-high-glow" class="absolute inset-0 bg-orange-500/0 blur-md rounded-full transition-all duration-500"></div>
+              <div id="ind-high-dot" class="w-3 h-3 rounded-full bg-neutral-700 relative z-10 transition-colors duration-500"></div>
+            </div>
+            <span id="ind-high-text" class="text-sm font-medium text-neutral-600 transition-colors duration-500">High Load</span>
+            
+            <!-- Tooltip -->
+            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-neutral-900 border border-neutral-700 rounded-lg shadow-xl p-3 opacity-0 invisible group-hover/high:opacity-100 group-hover/high:visible transition-all duration-300 z-50 pointer-events-none">
+              <p class="text-xs font-bold text-neutral-300 mb-1">HighLatency_DDoS</p>
+              <p class="text-[10px] text-neutral-500 font-mono">expr: Latency > 100ms AND RPS > 100 for 5s</p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -196,6 +234,9 @@
 
         const data = await res.json();
         document.getElementById('threat-metric').innerText = data.threats_blocked_count;
+        
+        const activeAlerts = data.active_alerts || [];
+        updateIndicators(activeAlerts);
 
         if (data.threats_blocked_count > lastThreatsCount) {
           if (lastThreatsCount !== 0) {
@@ -225,6 +266,33 @@
         dot.className = "w-3 h-3 bg-emerald-500 rounded-full status-dot cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-colors duration-500";
       } else {
         dot.className = "w-3 h-3 bg-red-500 rounded-full status-dot cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.8)] transition-colors duration-500";
+      }
+    }
+
+    function updateIndicators(alerts) {
+      const hasLow = alerts.some(a => a.name === "LowLoad_ScaleDown");
+      const hasHigh = alerts.some(a => a.name === "HighLatency_DDoS");
+
+      // Low Load Indicator
+      if (hasLow) {
+        document.getElementById('ind-low-dot').className = "w-3 h-3 rounded-full bg-blue-400 relative z-10 transition-colors duration-500 status-dot";
+        document.getElementById('ind-low-glow').className = "absolute inset-0 bg-blue-500/60 blur-md rounded-full transition-all duration-500 animate-pulse";
+        document.getElementById('ind-low-text').className = "text-sm font-medium text-blue-300 transition-colors duration-500";
+      } else {
+        document.getElementById('ind-low-dot').className = "w-3 h-3 rounded-full bg-neutral-700 relative z-10 transition-colors duration-500";
+        document.getElementById('ind-low-glow').className = "absolute inset-0 bg-blue-500/0 blur-md rounded-full transition-all duration-500";
+        document.getElementById('ind-low-text').className = "text-sm font-medium text-neutral-600 transition-colors duration-500";
+      }
+
+      // High Load Indicator
+      if (hasHigh) {
+        document.getElementById('ind-high-dot').className = "w-3 h-3 rounded-full bg-orange-500 relative z-10 transition-colors duration-500 status-dot";
+        document.getElementById('ind-high-glow').className = "absolute inset-0 bg-orange-500/60 blur-md rounded-full transition-all duration-500 animate-pulse";
+        document.getElementById('ind-high-text').className = "text-sm font-medium text-orange-400 transition-colors duration-500";
+      } else {
+        document.getElementById('ind-high-dot').className = "w-3 h-3 rounded-full bg-neutral-700 relative z-10 transition-colors duration-500";
+        document.getElementById('ind-high-glow').className = "absolute inset-0 bg-orange-500/0 blur-md rounded-full transition-all duration-500";
+        document.getElementById('ind-high-text').className = "text-sm font-medium text-neutral-600 transition-colors duration-500";
       }
     }
 

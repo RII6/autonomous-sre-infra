@@ -2,13 +2,13 @@ groups:
   - name: SRE_Defense_Rules
     rules:
       - alert: HighLatency_DDoS
-        expr: (sum(rate(http_request_duration_seconds_sum{handler="/api/heavy"}[15s])) / sum(rate(http_request_duration_seconds_count{handler="/api/heavy"}[15s]))) > 0.2
+        expr: (sum(rate(http_request_duration_seconds_sum{handler="/api/heavy"}[15s])) / sum(rate(http_request_duration_seconds_count{handler="/api/heavy"}[15s]))) > 0.1 and sum(rate(http_requests_total[15s])) > 100
         for: 5s
         labels:
           severity: critical
         annotations:
-          summary: "API Latency > 500ms (High Load)"
-          description: "Average latency is extremely high, triggering auto-scaling to 2 replicas."
+          summary: "API Latency > 100ms AND Load > 100 RPS"
+          description: "Average latency is extremely high under heavy load, triggering auto-scaling to 2 replicas."
 
       - alert: BackendDead
         expr: sum(up{job="sre-backend"}) == 0 or absent(up{job="sre-backend"})
@@ -21,7 +21,7 @@ groups:
 
       - alert: LowLoad_ScaleDown
         expr: sum(rate(http_requests_total[15s])) < 10
-        for: 3m
+        for: 1m
         labels:
           severity: info
         annotations:

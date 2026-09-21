@@ -19,7 +19,7 @@
         "h": 9
       },
       "datasource": "Prometheus",
-      "transparent": true,
+      "transparent": false,
       "options": {
         "tooltip": {
           "mode": "multi"
@@ -56,7 +56,7 @@
         "h": 9
       },
       "datasource": "Prometheus",
-      "transparent": true,
+      "transparent": false,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -104,7 +104,7 @@
         "h": 9
       },
       "datasource": "Prometheus",
-      "transparent": true,
+      "transparent": false,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -135,7 +135,7 @@
         "h": 9
       },
       "datasource": "Prometheus",
-      "transparent": true,
+      "transparent": false,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -157,7 +157,7 @@
     },
     {
       "title": "Cluster Nodes Status",
-      "type": "stat",
+      "type": "state-timeline",
       "gridPos": {
         "x": 0,
         "y": 18,
@@ -165,13 +165,12 @@
         "h": 6
       },
       "datasource": "Prometheus",
-      "transparent": true,
+      "transparent": false,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "textMode": "value_and_name"
+        "showValue": "never",
+        "mergeValues": true,
+        "alignValue": "left",
+        "rowHeight": 0.9
       },
       "fieldConfig": {
         "defaults": {
@@ -180,12 +179,12 @@
               "type": "value",
               "options": {
                 "1": {
-                  "text": "\ud83d\udfe2 Online",
-                  "index": 0
+                  "text": "Online",
+                  "color": "green"
                 },
                 "0": {
-                  "text": "\ud83d\udd34 Offline",
-                  "index": 1
+                  "text": "Offline",
+                  "color": "red"
                 }
               }
             }
@@ -209,7 +208,7 @@
         "h": 6
       },
       "datasource": "Prometheus",
-      "transparent": true,
+      "transparent": false,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -243,7 +242,7 @@
         "h": 6
       },
       "datasource": "Prometheus",
-      "transparent": true,
+      "transparent": false,
       "options": {
         "colorMode": "value",
         "graphMode": "area"

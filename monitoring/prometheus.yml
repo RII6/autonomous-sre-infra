@@ -32,3 +32,9 @@ scrape_configs:
       - names: ['app']
         type: 'A'
         port: 8000
+        refresh_interval: 2s
+        
+  # 5. SRE Agent (Control Plane)
+  - job_name: 'sre-agent'
+    static_configs:
+      - targets: ['sre_agent:8001']

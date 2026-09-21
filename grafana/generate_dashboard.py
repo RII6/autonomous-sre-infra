@@ -13,7 +13,7 @@ dashboard = {
       "type": "timeseries",
       "gridPos": {"x": 0, "y": 0, "w": 12, "h": 9},
       "datasource": "Prometheus",
-      "transparent": True,
+      "transparent": False,
       "options": {
         "tooltip": {"mode": "multi"}
       },
@@ -40,7 +40,7 @@ dashboard = {
       "type": "timeseries",
       "gridPos": {"x": 12, "y": 0, "w": 12, "h": 9},
       "datasource": "Prometheus",
-      "transparent": True,
+      "transparent": False,
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "fixed", "fixedColor": "orange"},
@@ -71,7 +71,7 @@ dashboard = {
       "type": "timeseries",
       "gridPos": {"x": 0, "y": 9, "w": 12, "h": 9},
       "datasource": "Prometheus",
-      "transparent": True,
+      "transparent": False,
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "palette-classic"},
@@ -95,7 +95,7 @@ dashboard = {
       "type": "timeseries",
       "gridPos": {"x": 12, "y": 9, "w": 12, "h": 9},
       "datasource": "Prometheus",
-      "transparent": True,
+      "transparent": False,
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "palette-classic"},
@@ -115,16 +115,15 @@ dashboard = {
     },
     {
       "title": "Cluster Nodes Status",
-      "type": "stat",
+      "type": "state-timeline",
       "gridPos": {"x": 0, "y": 18, "w": 8, "h": 6},
       "datasource": "Prometheus",
-      "transparent": True,
+      "transparent": False,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "textMode": "value_and_name"
+        "showValue": "never",
+        "mergeValues": True,
+        "alignValue": "left",
+        "rowHeight": 0.9
       },
       "fieldConfig": {
         "defaults": {
@@ -132,8 +131,8 @@ dashboard = {
             {
               "type": "value",
               "options": {
-                "1": {"text": "🟢 Online", "index": 0},
-                "0": {"text": "🔴 Offline", "index": 1}
+                "1": {"text": "Online", "color": "green"},
+                "0": {"text": "Offline", "color": "red"}
               }
             }
           ]
@@ -151,7 +150,7 @@ dashboard = {
       "type": "timeseries",
       "gridPos": {"x": 8, "y": 18, "w": 8, "h": 6},
       "datasource": "Prometheus",
-      "transparent": True,
+      "transparent": False,
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "fixed", "fixedColor": "green"},
@@ -177,7 +176,7 @@ dashboard = {
       "type": "stat",
       "gridPos": {"x": 16, "y": 18, "w": 8, "h": 6},
       "datasource": "Prometheus",
-      "transparent": True,
+      "transparent": False,
       "options": {
         "colorMode": "value",
         "graphMode": "area"
