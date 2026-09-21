@@ -28,7 +28,7 @@
     <!-- HEADER -->
     <header class="relative z-50 flex justify-between items-center bg-neutral-900/40 border border-neutral-800 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
       <div>
-        <h1 class="text-2xl font-bold text-neutral-100 tracking-tight">SRE Defense Lab</h1>
+        <h1 class="text-2xl font-bold text-neutral-100 tracking-tight">SRE Defense Playground</h1>
         <p class="text-neutral-500 text-sm mt-1">Infrastructure Control Plane (sre_agent)</p>
       </div>
       <div class="flex items-center gap-6">
@@ -67,18 +67,17 @@
       <!-- Metric Card (Real) -->
       <div class="bg-neutral-900/30 border border-neutral-800 rounded-2xl p-5 hover:border-neutral-700 hover:bg-neutral-900/50 transition-all duration-300 relative overflow-hidden group">
         <div class="absolute top-0 right-0 w-16 h-16 bg-red-500/10 rounded-bl-full blur-2xl"></div>
-        <p class="text-neutral-500 text-xs font-medium uppercase tracking-wider mb-1">Заблокированные угрозы</p>
+        <p class="text-neutral-500 text-xs font-medium uppercase tracking-wider mb-1">Blocked Threats</p>
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <p id="threat-metric" class="text-3xl font-semibold text-red-400">0</p>
-            <span class="text-red-500/50 text-xs border border-red-500/20 px-2 py-0.5 rounded-full">REAL</span>
           </div>
         </div>
       </div>
 
       <!-- Alert Indicators Card -->
       <div class="bg-neutral-900/30 border border-neutral-800 rounded-2xl p-5 hover:border-neutral-700 hover:bg-neutral-900/50 transition-all duration-300 relative group flex flex-col justify-between">
-        <p class="text-neutral-500 text-xs font-medium uppercase tracking-wider mb-4">Статус Нагрузки (Алерты)</p>
+        <p class="text-neutral-500 text-xs font-medium uppercase tracking-wider mb-4">Load Status (Alerts)</p>
         <div class="flex items-center gap-8">
           
           <!-- Low Load Indicator -->
@@ -92,7 +91,7 @@
             <!-- Tooltip -->
             <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-neutral-900 border border-neutral-700 rounded-lg shadow-xl p-3 opacity-0 invisible group-hover/low:opacity-100 group-hover/low:visible transition-all duration-300 z-50 pointer-events-none">
               <p class="text-xs font-bold text-neutral-300 mb-1">LowLoad_ScaleDown</p>
-              <p class="text-[10px] text-neutral-500 font-mono">expr: RPS < 10 for 1m</p>
+              <p class="text-[10px] text-neutral-500 font-mono">expr: RPS < 10 for 3m</p>
             </div>
           </div>
 
@@ -141,7 +140,7 @@
             class="w-full group relative flex items-center justify-between bg-neutral-950 border border-neutral-800 hover:border-amber-500/50 p-4 rounded-xl transition-all duration-300 overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-r from-amber-500/0 via-amber-500/0 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="text-left">
-              <p class="text-sm font-medium text-neutral-200">Высокая нагрузка (Load)</p>
+              <p class="text-sm font-medium text-neutral-200">High Load (Simulate)</p>
               <p class="text-xs text-neutral-500 mt-0.5">Spawns hey container to spike Latency</p>
             </div>
           </button>
@@ -151,7 +150,7 @@
             class="w-full group relative flex items-center justify-between bg-neutral-950 border border-neutral-800 hover:border-purple-500/50 p-4 rounded-xl transition-all duration-300 overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/0 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="text-left">
-              <p class="text-sm font-medium text-neutral-200">Убить Контейнер (Kill)</p>
+              <p class="text-sm font-medium text-neutral-200">Kill Container</p>
               <p class="text-xs text-neutral-500 mt-0.5">Test Alertmanager Self-Healing</p>
             </div>
           </button>

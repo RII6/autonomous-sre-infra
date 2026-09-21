@@ -21,7 +21,7 @@ groups:
 
       - alert: LowLoad_ScaleDown
         expr: sum(rate(http_requests_total[15s])) < 10
-        for: 1m
+        for: 3m
         labels:
           severity: info
         annotations:
